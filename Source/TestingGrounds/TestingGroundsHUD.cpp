@@ -29,7 +29,6 @@ void ATestingGroundsHUD::DrawHUD()
 										   (Center.Y + 20.0f));
 
 	FString Name = GetName();
-	UE_LOG(LogTemp, Warning, TEXT("Hello: %s"), *Name);
 
 	// draw the crosshair
 	FCanvasTileItem TileItem( CrosshairDrawPosition, CrosshairTex->Resource, FLinearColor::White);
