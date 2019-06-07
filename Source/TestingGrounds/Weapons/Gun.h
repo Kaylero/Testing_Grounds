@@ -11,10 +11,6 @@ class TESTINGGROUNDS_API AGun : public AActor
 {
 	GENERATED_BODY()
 
-	/** Location on gun mesh where projectiles should spawn. */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	class USceneComponent* FP_MuzzleLocation;
-
 	/** Gun mesh: 1st person view (seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	class USkeletalMeshComponent* FP_Gun;
@@ -28,6 +24,17 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+
+	/** Location on gun mesh where projectiles should spawn. */
+	UPROPERTY(BlueprintReadWrite, Category = Mesh)
+	class USceneComponent* FP_MuzzleLocation;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float FireDelay;
+
+	UPROPERTY(EditAnywhere, Category = "Firing")
+	float LastFireTime;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -49,5 +56,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 	class UAnimInstance* AnimInstance;
 
+private:
 
+	
 };
