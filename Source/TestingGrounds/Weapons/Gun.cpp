@@ -43,12 +43,12 @@ void AGun::Tick(float DeltaTime)
 void AGun::OnFire()
 {
 	
-	if (LastFireTime <= FireDelay)
+	/*if (LastFireTime <= FireDelay)
 	{
 		return;
 	}
 
-	LastFireTime = 0.0f;
+	LastFireTime = 0.0f;*/
 
 	// try and fire a projectile
 	if (ProjectileClass != NULL)
