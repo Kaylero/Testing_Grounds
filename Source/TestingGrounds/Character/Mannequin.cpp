@@ -32,13 +32,25 @@ void AMannequin::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GunBlueprint == NULL) {
+	if (GunBlueprint == NULL) 
+	{
 		UE_LOG(LogTemp, Warning, TEXT("Gun blueprint missing."));
 		return;
 	}
+
 	Gun = GetWorld()->SpawnActor<AGun>(GunBlueprint);
-	Gun->AttachToComponent(FP_Arms, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint")); //Attach gun mesh component to Skeleton, doing it here because the skelton is not yet created in the constructor																													
-	Gun->AnimInstance = GetMesh()->GetAnimInstance();
+
+	if (IsPlayerControlled())
+	{
+		Gun->AttachToComponent(FP_Arms, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	}
+	else
+	{
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	}
+
+	Gun->AnimInstanceFP = FP_Arms->GetAnimInstance();
+	Gun->AnimInstanceTP = GetMesh()->GetAnimInstance();
 
 	if (InputComponent != NULL)
 	{
@@ -62,6 +74,15 @@ void AMannequin::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 	
 
 	
+}
+
+void AMannequin::UnPossessed()
+{
+	Super::UnPossessed();
+	if (Gun != NULL)
+	{
+		Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	}
 }
 
 void AMannequin::PullTrigger()

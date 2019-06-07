@@ -51,10 +51,16 @@ public:
 	class USoundBase* FireSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	class UAnimMontage* FireAnimation;
+	class UAnimMontage* FireAnimationFP;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
-	class UAnimInstance* AnimInstance;
+	class UAnimMontage* FireAnimationTP;
+
+	UPROPERTY()
+	class UAnimInstance* AnimInstanceFP;
+
+	UPROPERTY()
+	class UAnimInstance* AnimInstanceTP;
 
 private:
 
