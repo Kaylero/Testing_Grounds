@@ -54,7 +54,6 @@ void AMannequin::BeginPlay()
 
 	if (InputComponent != NULL)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Hello"));
 		InputComponent->BindAction("Fire", IE_Pressed, this, &AMannequin::PullTrigger);
 	}
 	
