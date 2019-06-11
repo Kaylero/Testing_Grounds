@@ -3,6 +3,7 @@
 
 #include "Tile.h"
 #include "Runtime/Engine/Classes/Engine/StaticMesh.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ATile::ATile()
@@ -17,14 +18,14 @@ void ATile::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	CastSphere(GetActorLocation(), 300);
 }
 
 // Called every frame
 void ATile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
+	
 }
 
 void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn)
@@ -42,7 +43,30 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn)
 		AActor* SpawnedActor = GetWorld()->SpawnActor(ToSpawn);
 		SpawnedActor->SetActorRelativeLocation(SpawnPoint);
 		SpawnedActor->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::KeepRelative, false));
-		UE_LOG(LogTemp, Warning, TEXT("SpawnPoint: %s"), *SpawnPoint.ToString());
 	}
+}
+
+bool ATile::CastSphere(FVector Location, float Radius)
+{
+	FHitResult HitResult;
+	bool HasHit = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		Location,
+		Location + FVector(0.001f, 0.001f, 0.001f),
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel2,
+		FCollisionShape::MakeSphere(Radius)
+	);
+
+	if (HasHit)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HitResult %s"),  *HitResult.Actor->GetName());
+	}
+
+	FColor ResultColor = HasHit ? FColor::Red : FColor::Green;
+
+	DrawDebugSphere(GetWorld(), Location, Radius, 100, ResultColor, true, 100);
+
+	return HasHit;
 }
 

@@ -29,4 +29,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* BoxMesh;
 
+private:
+
+	bool CastSphere(FVector Location, float Radius);
+
 };
