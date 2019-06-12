@@ -24,13 +24,16 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	void PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn);
+	void PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn, float Radius);
 
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* BoxMesh;
 
 private:
 
-	bool CastSphere(FVector Location, float Radius);
+
+	bool GetEmptyLocation(FVector& OutLocation, float Radius);
+	void PlaceActor(TSubclassOf<AActor> ToSpawn, FVector Location, float Rotation);
+	bool CanSpawnAtLocation(FVector Location, float Radius);
 
 };
