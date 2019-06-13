@@ -4,6 +4,9 @@
 #include "Tile.h"
 #include "Runtime/Engine/Classes/Engine/StaticMesh.h"
 #include "DrawDebugHelpers.h"
+#include "ActorPool.h"
+#include "InfiniteTerrainGameMode.h"
+
 
 // Sets default values
 ATile::ATile()
@@ -18,7 +21,6 @@ void ATile::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	CanSpawnAtLocation(GetActorLocation(), 300);
 }
 
 // Called every frame
@@ -41,6 +43,11 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn,
 			PlaceActor(ToSpawn, SpawnPoint, RandomRotation);
 		}
 	}
+}
+
+void ATile::SetPool(UActorPool* Pool)
+{
+	this->Pool = Pool;
 }
 
 bool ATile::GetEmptyLocation(FVector& OutLocation, float Radius)

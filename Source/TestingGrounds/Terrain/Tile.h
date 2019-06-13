@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Tile.generated.h"
 
+class UActorPool;
+
 UCLASS()
 class TESTINGGROUNDS_API ATile : public AActor
 {
@@ -29,8 +31,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* BoxMesh;
 
+	UFUNCTION(BlueprintCallable, CAtegory = "Pool")
+	void SetPool(UActorPool* Pool);
+
 private:
 
+	UActorPool* Pool;
 
 	bool GetEmptyLocation(FVector& OutLocation, float Radius);
 	void PlaceActor(TSubclassOf<AActor> ToSpawn, FVector Location, float Rotation);
