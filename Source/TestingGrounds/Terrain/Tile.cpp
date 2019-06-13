@@ -23,6 +23,13 @@ void ATile::BeginPlay()
 	
 }
 
+void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	Pool->Return(NavMeshBoundsVolume);
+}
+
 // Called every frame
 void ATile::Tick(float DeltaTime)
 {
@@ -48,6 +55,19 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn,
 void ATile::SetPool(UActorPool* Pool)
 {
 	this->Pool = Pool;
+
+	PoisitioningNavMeshBoundsVolume(Pool);
+}
+
+void ATile::PoisitioningNavMeshBoundsVolume(UActorPool* Pool)
+{
+	NavMeshBoundsVolume = Pool->Checkout();
+
+	if (!ensure(NavMeshBoundsVolume != nullptr))
+	{
+		return;
+	}
+	NavMeshBoundsVolume->SetActorLocation(GetActorLocation());
 }
 
 bool ATile::GetEmptyLocation(FVector& OutLocation, float Radius)

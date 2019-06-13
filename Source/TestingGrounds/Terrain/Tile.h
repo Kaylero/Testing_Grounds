@@ -21,6 +21,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -34,10 +36,14 @@ public:
 	UFUNCTION(BlueprintCallable, CAtegory = "Pool")
 	void SetPool(UActorPool* Pool);
 
+
+
 private:
 
 	UActorPool* Pool;
+	AActor* NavMeshBoundsVolume;
 
+	void PoisitioningNavMeshBoundsVolume(UActorPool* Pool);
 	bool GetEmptyLocation(FVector& OutLocation, float Radius);
 	void PlaceActor(TSubclassOf<AActor> ToSpawn, FVector Location, float Rotation);
 	bool CanSpawnAtLocation(FVector Location, float Radius);
