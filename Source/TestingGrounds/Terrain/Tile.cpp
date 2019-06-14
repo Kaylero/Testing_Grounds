@@ -6,6 +6,7 @@
 #include "DrawDebugHelpers.h"
 #include "ActorPool.h"
 #include "InfiniteTerrainGameMode.h"
+#include "NavigationSystem.h"
 
 
 // Sets default values
@@ -20,7 +21,6 @@ ATile::ATile()
 void ATile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void ATile::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -52,22 +52,46 @@ void ATile::PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn,
 	}
 }
 
+void ATile::PlaceAIPawns(TSubclassOf<APawn> ToSpawn, int MinSpawn, int MaxSpawn, float Radius)
+{
+	int NumberToSpwan = FMath::RandRange(MinSpawn, MaxSpawn);
+
+	for (size_t i = 0; i < NumberToSpwan; i++)
+	{
+		FVector SpawnPoint;
+		if (GetEmptyLocation(SpawnPoint, Radius))
+		{
+			APawn* AIPawn = Cast<APawn>(GetWorld()->SpawnActor(ToSpawn));
+			AIPawn->Tags.Add(FName("Enemy"));
+			AIPawn->SpawnDefaultController();
+
+			AIPawn->SetActorLocation(GetActorLocation() + SpawnPoint + FVector (0,0,1));
+			float RandomRotation = FMath::RandRange(-180.0f, 180.0f);
+
+			AIPawn->SetActorRotation(FRotator(0, RandomRotation, 0));
+
+		}
+	}
+}
+
 void ATile::SetPool(UActorPool* Pool)
 {
 	this->Pool = Pool;
 
-	PoisitioningNavMeshBoundsVolume(Pool);
+	PositioningNavMeshBoundsVolume(Pool);
 }
 
-void ATile::PoisitioningNavMeshBoundsVolume(UActorPool* Pool)
+void ATile::PositioningNavMeshBoundsVolume(UActorPool* Pool)
 {
 	NavMeshBoundsVolume = Pool->Checkout();
 
-	if (!ensure(NavMeshBoundsVolume != nullptr))
+	if (NavMeshBoundsVolume == nullptr)
 	{
 		return;
 	}
-	NavMeshBoundsVolume->SetActorLocation(GetActorLocation());
+
+	NavMeshBoundsVolume->SetActorLocation(GetActorLocation()+ FVector(2000,0,0));
+	FNavigationSystem::Build(*GetWorld());
 }
 
 bool ATile::GetEmptyLocation(FVector& OutLocation, float Radius)
@@ -115,8 +139,6 @@ bool ATile::CanSpawnAtLocation(FVector Location, float Radius)
 	);
 
 	FColor ResultColor = HasHit ? FColor::Red : FColor::Green;
-
-	//DrawDebugSphere(GetWorld(), Location, Radius, 100, ResultColor, true, 100);
 
 	return !HasHit;
 }

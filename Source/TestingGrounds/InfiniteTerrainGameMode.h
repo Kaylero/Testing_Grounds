@@ -18,7 +18,7 @@ public:
 	AInfiniteTerrainGameMode();
 
 	UFUNCTION(BlueprintCallable, Category = "Bounds Pool")
-		void PopulateBoundsVolumePool();
+	void PopulateBoundsVolumePool();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Pool")

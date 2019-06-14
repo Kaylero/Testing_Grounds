@@ -30,6 +30,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void PlaceActors(TSubclassOf<AActor> ToSpawn, int MinSpawn, int MaxSpawn, float Radius);
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void PlaceAIPawns(TSubclassOf<APawn> ToSpawn, int MinSpawn, int MaxSpawn, float Radius);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* BoxMesh;
 
@@ -43,7 +46,7 @@ private:
 	UActorPool* Pool;
 	AActor* NavMeshBoundsVolume;
 
-	void PoisitioningNavMeshBoundsVolume(UActorPool* Pool);
+	void PositioningNavMeshBoundsVolume(UActorPool* Pool);
 	bool GetEmptyLocation(FVector& OutLocation, float Radius);
 	void PlaceActor(TSubclassOf<AActor> ToSpawn, FVector Location, float Rotation);
 	bool CanSpawnAtLocation(FVector Location, float Radius);
